@@ -5,9 +5,7 @@ const todoList = document.querySelector('.todo-list');
 const todoCompleted = document.querySelector('.todo-completed');
 const headerInput = document.querySelector('.header-input');
 
-let toDoData = [];
-
-toDoData = JSON.parse(localStorage.getItem('todoList1'));
+let toDoData = JSON.parse(localStorage.getItem('todoList1')) || [];
 
 const render = function() {
     todoList.innerHTML = '';
@@ -29,8 +27,8 @@ const render = function() {
             render();
         })
 
-        newLi.querySelector('.todo-remove').addEventListener('click', function() {
-            toDoData.splice(item, 1);
+        newLi.querySelector('.todo-remove').addEventListener('click', function(item, index) {
+            toDoData.splice(item[index], 1);
             localStorage.removeItem(item);
             render();
         })
@@ -42,11 +40,12 @@ todoControl.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const newToDo = {
+        index: 0,
         text: '',
         completed: false
     };
 
-    if (headerInput.value === '') {alert('Какие планы на сегодня?'); return}
+    if (headerInput.value.trim() === '') {alert('Какие планы на сегодня?'); return}
     else (newToDo.text = headerInput.value);
 
     toDoData.push(newToDo);
